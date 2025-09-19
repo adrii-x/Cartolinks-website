@@ -18,23 +18,19 @@ export default function Home() {
 
  useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      // Handle profile dropdown
       if (profileDropdownRef.current && 
           !profileDropdownRef.current.contains(event.target as Node)) {
         setdropdownstatus(false);
       }
       
-      // Handle workspace dropdown
       if (workspaceDropdownRef.current && 
           !workspaceDropdownRef.current.contains(event.target as Node)) {
         setworkspaceDropdownstatus(false);
       }
     }
 
-    // Add event listener
     document.addEventListener('mousedown', handleClickOutside);
     
-    // Cleanup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -172,7 +168,6 @@ export default function Home() {
                           {item.icon}
                         </div>
                         
-                        {/* Active background */}
                         {activeTab === item.id && (
                           <div className={`absolute inset-0 z-10 rounded-xl shadow-sm transition-colors duration-200 ${
                             darkMode 
@@ -181,7 +176,6 @@ export default function Home() {
                           }`} />
                         )}
                         
-                        {/* Tooltip */}
                         <span className={`pointer-events-none absolute top-13 left-1/2 z-10 block origin-top -translate-x-1/2 scale-90 rounded-lg px-1.5 py-1 text-xs leading-none font-medium opacity-0 transition-[transform,scale,opacity] duration-75 ease-out group-hover:scale-100 group-hover:opacity-100 ${
                           darkMode 
                             ? 'bg-gray-800 text-white' 
@@ -195,7 +189,7 @@ export default function Home() {
                 </ul>
                   </nav>
 
-      <nav className={`fixed top-0 left-0 right-0 z-5  shadow-md`} >
+      <nav className={`fixed top-0 left-0 right-0 z-5 `} >
             <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center h-16"> 
 
@@ -265,7 +259,6 @@ export default function Home() {
                         : 'bg-white border-gray-200 text-gray-900 shadow-[0_2px_8px_0px_rgba(0,0,0,0.1)]'
                     }`}>
                       <div className="flex flex-col gap-0.5 px-2.5 py-2.5">
-                        {/* Workspaces Label */}
                         <div className={`px-1 py-1 text-xs font-medium ${
                           darkMode ? 'text-gray-400' : 'text-gray-500'
                         }`} >
@@ -273,7 +266,6 @@ export default function Home() {
                         </div>
 
 
-                        {/* Personal Workspace */}
                         <div className="group flex w-full">
                           <div 
                             className={`flex w-full items-center gap-2 rounded-md py-[3.8px] pr-1.5 pl-2 text-xs transition-colors duration-100 ease-out ${
@@ -314,7 +306,6 @@ export default function Home() {
                                   viewBox="0 0 24 24" 
                                   fill="currentColor"
                                 >
-                                  {/* Settings icon path */}
                                 </svg>
                               </div>
                             </div>
@@ -323,7 +314,6 @@ export default function Home() {
 
                    
 
-                    {/* Create New Team Button */}
                     <button className={`group flex w-full items-center gap-2 rounded-md px-2 py-2 text-xs transition-colors duration-100 ease-out ${
                       darkMode 
                         ? 'hover:bg-blue-500/15 hover:text-blue-400' 
@@ -375,7 +365,6 @@ export default function Home() {
                           {item.icon}
                         </div>
                         
-                        {/* Active background */}
                         {activeTab === item.id && (
                           <div className={`absolute inset-0 z-10 rounded-xl shadow-sm transition-colors duration-200 ${
                             darkMode 
@@ -384,7 +373,6 @@ export default function Home() {
                           }`} />
                         )}
                         
-                        {/* Tooltip */}
                         <span className={`pointer-events-none absolute top-13 left-1/2 z-10 block origin-top -translate-x-1/2 scale-90 rounded-lg px-1.5 py-1 text-xs leading-none font-medium opacity-0 transition-[transform,scale,opacity] duration-75 ease-out group-hover:scale-100 group-hover:opacity-100 ${
                           darkMode 
                             ? 'bg-gray-800 text-white' 
@@ -438,7 +426,6 @@ export default function Home() {
 
                     </button>
               
-                    {/* Dark/Light Mode Toggle */}
                     <button
                       onClick={toggleDarkMode}
                         className={`hidden max-[490px]:flex min-[601px]:flex h-[30px] w-[30px] items-center justify-center rounded-lg backdrop-blur-lg transition-colors duration-150 ease-[cubic-bezier(.33,0,.2,1)] ${
@@ -450,7 +437,6 @@ export default function Home() {
                       title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                     >
                       {darkMode ? (
-                        // Sun icon for light mode
                         
                     <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" fill="currentColor">
                     <path d="M 45 68 c -12.682 0 -23 -10.317 -23 -23 c 0 -12.682 10.318 -23 23 -23 c 12.683 0 23 10.318 23 23 C 68 57.683 57.683 68 45 68 z"/>
@@ -503,7 +489,6 @@ export default function Home() {
                         </svg>
                   </button>
 
-                  {/* Hidden File Input */}
                       <input
                         id="imageUpload"
                         type="file"
@@ -608,7 +593,8 @@ export default function Home() {
 
 
       </nav>
-      <Main/>
+      <Main darkMode={darkMode}/>
+
 
       
 
