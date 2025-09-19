@@ -204,9 +204,7 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
-      {/* viewport */}
       <div className="overflow-hidden">
-        {/* track */}
         <div
           ref={trackRef}
           className={`flex gap-[60px] will-change-transform ${
@@ -311,7 +309,7 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
       </div>
 
       {/* controls */}
-      <div className="mt-4 flex items-center justify-center relative">
+      <div className="mt-4 hidden  sm:flex items-center justify-center relative">
         <div className="flex items-center gap-2">
           {slides.map((_, i) => (
             <button
