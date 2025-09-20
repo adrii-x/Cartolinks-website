@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import Image from 'next/image'
+import { useState } from 'react'
 
 interface GalleryProps {
   isDarkMode?: boolean
@@ -70,15 +71,45 @@ const demoApps = [
 ]
 
 export default function Gallery({ isDarkMode }: GalleryProps) {
+    const [isExpanded, setIsExpanded] = useState(true)
+
+    const toggleExpanded = () => {
+    setIsExpanded(!isExpanded)
+  }
+  
   return (
     <div className="mx-auto w-full max-w-7xl px-1">
       {/* Header */}
-      <div className="my-18 mb-1.5 flex w-full justify-between animate-in slide-in-from-bottom-4 duration-500">
+           <div className="my-18 mb-1.5 flex w-full justify-between animate-in slide-in-from-bottom-4 duration-500">
         <h2 className={`text-xl font-[600] ${isDarkMode ? 'text-white' : 'text-black'}`}>
           Gallery
         </h2>
+        
+        <button 
+          className="group text-xs font-[600] text-blue-500 hover:text-blue-700 transition-colors duration-200"     
+          onClick={toggleExpanded}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="18" 
+            height="18" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            className={`mr-0.5 inline-block transition-transform duration-200 ease-out group-hover:translate-y-[1px] ${
+              isExpanded ? 'rotate-180' : ''
+            }`}
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+          Show all
+        </button>
       </div>
 
+        {isExpanded && (
       <nav className="mx-auto flex w-full origin-bottom transform items-center justify-center transition-[translate,scale,opacity] duration-400 ease-out animate-in slide-in-from-bottom-4">
         <menu className="-mx-3.5 grid grid-flow-row grid-cols-2 gap-x-0.5 px-1 gap-y-2.5 max-[639px]:p-[30px] min-[536px]:p-[30px] md:grid-cols-4 md:px-0 lg:grid-cols-5 lg:px-0 xl:grid-cols-6 xl:px-0">
           {demoApps.map((app) => (
@@ -114,6 +145,7 @@ export default function Gallery({ isDarkMode }: GalleryProps) {
           ))}
         </menu>
       </nav>
+        )}
     </div>
   )
 }
