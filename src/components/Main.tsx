@@ -4,6 +4,7 @@ import React from 'react';
 import Carousel from "../components/Carousel";
 import Generate from "../components/Generate";
 import Gallery from "../components/Gallery";
+import Footer from "../components/Footer";
 import "../app/globals.css";
 
 export default function Main({ darkMode }: { darkMode?: boolean }) {
@@ -12,6 +13,8 @@ export default function Main({ darkMode }: { darkMode?: boolean }) {
         <Carousel isDarkMode={darkMode} />
         <Generate isDarkMode={darkMode}/>
         <Gallery isDarkMode={darkMode}/>
+        <Footer isDarkMode={darkMode}/>
+
 
     </div>
   );
