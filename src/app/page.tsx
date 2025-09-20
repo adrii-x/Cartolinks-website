@@ -1,7 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from "react";
 import Main from '../components/Main'; 
-
 import Image from 'next/image'
 
 
@@ -139,7 +138,7 @@ export default function Home() {
   return (
     <div className={`min-h-screen relative `}>
 
-                  <nav className={` min-[500px]:hidden absolute bottom-0 flex items-center w-full pb-2 pt-2 justify-center rounded-2xl backdrop-blur-2xl transition-colors duration-300 px-1.5 py-1.5 ${
+                  <nav className={` min-[500px]:hidden fixed buttom-0 left-0 right-0 bottom-0 flex items-center w-full pb-2 pt-2 justify-center rounded-2xl backdrop-blur-2xl transition-colors duration-300 px-1.5 py-1.5 z-90 ${
                 darkMode 
                   ? 'bg-gray-700/80 border border-gray-600/50' 
                   : 'bg-gray-100 border border-gray-200/50'

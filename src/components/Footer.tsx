@@ -6,7 +6,7 @@ interface FooterProps {
 
 export default function Footer({ isDarkMode }: FooterProps) {
   return (
-    <footer className={`relative mt-12 py-8  ${
+    <footer className={`relative mt-12 py-8 max-[500px]:mb-[25px] mb-0  ${
       isDarkMode 
         ? 'bg-gray-950 text-gray-500 border-gray-800' 
         : 'bg-white text-gray-600 border-gray-200'
