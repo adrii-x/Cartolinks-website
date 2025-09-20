@@ -2,50 +2,58 @@
 
 interface FooterProps {
   isDarkMode?: boolean
-}
+  dark_text?: string
+} 
 
 export default function Footer({ isDarkMode }: FooterProps) {
+      const dark_text = '[rgb(115,115,115)]'
+
   return (
     <footer className={`relative mt-12 py-8 max-[500px]:mb-[25px] mb-0  ${
       isDarkMode 
-        ? 'bg-gray-950 text-gray-500 border-gray-800' 
-        : 'bg-white text-gray-600 border-gray-200'
+        ? `text-${dark_text} `
+        : ' text-gray-600 '
     }`}>
-      <div className={`mx-auto max-w-7xl px-5  pt-9.5 sm:px-10 border-t  ${
+      <div className={`mx-auto max-w-7xl px-5  pt-9.5 sm:px-10  ${
       isDarkMode 
-        ? 'bg-gray-950 text-gray-500 border-gray-800' 
-        : 'bg-white text-gray-600 border-gray-200'
+        ? `text-${dark_text}`
+        : ' text-gray-600'
 }`}>
         <div className="mb-8  gap-8 grid grid-cols-4 ">
-          <div>
-            <h3 className={`mb-4 text-sm max-[524px]:text-[12px]  font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
-              Krea
-            </h3>
-            <ul className="space-y-2.5 text-xs max-[524px]:text-[8px] ">
-              <li>
-                <a href="/login" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
-                  Log In
-                </a>
-              </li>
-              <li>
-                <a href="/pricing/teams" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
-                  Krea Teams
-                </a>
-              </li>
-              <li>
-                <a href="/enterprise" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
-                  Krea Enterprise
-                </a>
-              </li>
-              <li>
-                <a href="/feed" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
-                  Gallery
-                </a>
-              </li>
-            </ul>
-          </div>
 
-          <div>
+        <div className="mx-auto">
+                <div>
+                    <h3 className={`mb-4 text-sm max-[524px]:text-[12px]  font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                    Krea
+                    </h3>
+                    <ul className="space-y-2.5 text-xs max-[524px]:text-[8px] ">
+                    <li>
+                        <a href="/login" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                        Log In
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/pricing/teams" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                        Krea Teams
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/enterprise" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                        Krea Enterprise
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/feed" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                        Gallery
+                        </a>
+                    </li>
+                    </ul>
+                </div>
+
+        </div>
+
+        <div className="mx-auto">
+        <div>
             <h3 className={`mb-4 text-sm max-[524px]:text-[12px]  font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
               Products
             </h3>
@@ -98,7 +106,11 @@ export default function Footer({ isDarkMode }: FooterProps) {
             </ul>
           </div>
 
-          <div>
+
+        </div>
+
+        <div className="mx-auto">
+                      <div>
             <h3 className={`mb-4 text-sm max-[524px]:text-[11px]  font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
               Resources
             </h3>
@@ -136,7 +148,13 @@ export default function Footer({ isDarkMode }: FooterProps) {
             </ul>
           </div>
 
-          <div>
+            
+
+        </div>
+
+
+        <div className="mx-auto">
+             <div>
             <h3 className={`mb-4 text-sm max-[524px]:text-[11px] font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
               About
             </h3>
@@ -159,10 +177,12 @@ export default function Footer({ isDarkMode }: FooterProps) {
             </ul>
           </div>
         </div>
+         
+        </div>
 
         <div className={`flex flex-wrap items-center justify-between gap-4 border-t pt-4 text-xs font-medium ${
           isDarkMode 
-            ? 'border-gray-800 text-gray-500' 
+            ? `border-${dark_text}/25  text-${dark_text}`
             : 'border-gray-200 text-gray-400'
         }`}>
           <p>By Adrian Okonkwo</p>

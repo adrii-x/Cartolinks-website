@@ -184,7 +184,7 @@ export default function Generate({ isDarkMode }: GenerateProps) {
                 <a 
                   className={`group flex w-full items-center justify-center rounded-2xl p-3.5 transition-colors duration-100 ease-out ${
                     isDarkMode 
-                      ? 'hover:bg-gray-700' 
+                      ? 'hover:bg-[rgb(115,115,115)]/10' 
                       : 'hover:bg-gray-100'
                   }`}
                 >
@@ -217,7 +217,7 @@ export default function Generate({ isDarkMode }: GenerateProps) {
 
                   <button className={`ml-2 rounded-full px-6 py-2.5 text-xs leading-none font-medium transition-colors duration-100 ease-out ${
                     isDarkMode
-                      ? 'bg-gray-700 text-white group-hover:bg-gray-600'
+                      ? 'bg-[rgb(115,115,115)]/20 text-white group-hover:bg-[rgb(115,115,115)]/10'
                       : 'bg-gray-100 text-black group-hover:bg-gray-200'
                   }`}>
                     Open

@@ -136,7 +136,7 @@ export default function Home() {
   ]
   
   return (
-    <div className={`min-h-screen relative `}>
+    <div className={`min-h-screen relative ${darkMode ? 'bg-[rgb(16,16,16)] ' : 'bg-white'} transition-colors duration-300`}>
 
                   <nav className={` min-[500px]:hidden fixed buttom-0 left-0 right-0 bottom-0 flex items-center w-full pb-2 pt-2 justify-center rounded-2xl backdrop-blur-2xl transition-colors duration-300 px-1.5 py-1.5 z-90 ${
                 darkMode 
@@ -212,8 +212,8 @@ export default function Home() {
                   </a>
 
 
-                    <div ref={workspaceDropdownRef} className="flex items-center pl-5 max-[812px]:hidden relative" >  
-                       <button onClick={toggleWorkspaceDropdownStatus} className=" hover:bg-blue-200/50 text-black/70 hover:text-black  md:flex items-center justify-center rounded-md   text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] p-[1.5px]">
+                    <div ref={workspaceDropdownRef} onClick={toggleWorkspaceDropdownStatus} className="flex items-center pl-5 max-[812px]:hidden relative" >  
+                       <button  className=" hover:bg-blue-200/50 text-black/70 hover:text-black  md:flex items-center justify-center rounded-md   text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] p-[1.5px]">
                         <Image
                           src={profileImage}
                           alt="Profile" 
@@ -222,7 +222,16 @@ export default function Home() {
                           className="opacity-70"
                         />
                         </button>
-                      <div className="flex items-center pl-1 cursor-pointer" >
+                        <div className={`
+                        flex items-center ml-1 cursor-pointer 
+                        backdrop-blur-lg transition-colors duration-150 
+                        ease-[cubic-bezier(.33,0,.2,1)] rounded-md
+                        ${darkMode 
+                          ? ' hover:bg-gray-00/75 text-white/80' 
+                          : ' hover:bg-gray-200/75 text-black/70'
+                        }
+                      `}>
+
                         <div className='pl-1 text-sm'>
                           <p>{activeName}</p>
                         </div>
@@ -348,7 +357,7 @@ export default function Home() {
                   ? 'bg-gray-700/80 border border-gray-600/50' 
                   : 'bg-gray-100 border border-gray-200/50'
               }`}>
-                <ul className="flex list-none p-0 m-0 space-x-0">
+                <ul className="flex lst-none p-0 m-0 space-x-0">
                   {navigationItems.map((item) => (
                     <li key={item.id}>
                       <button
@@ -357,15 +366,18 @@ export default function Home() {
                           activeTab === item.id
                             ? (darkMode ? 'text-gray-900' : 'text-gray-900')
                             : (darkMode ? 'text-white' : 'text-gray-700')
-                        } hover:${darkMode ? 'text-blue-400' : 'text-blue-600'}`}
+                        } `}
                         aria-label={`Open ${item.label}`}
                       >
-                        <div className="absolute inset-0 z-20 m-auto flex items-center justify-center">
+                        <div className={`absolute inset-0 z-20 m-auto flex items-center justify-center hover: ${(activeTab === item.id)?'': darkMode? 'hover:bg-white/15' : 'hover:bg-gray-500/10'} rounded-xl mx-[2.1px]`}>
                           {item.icon}
                         </div>
+
                         
                         {activeTab === item.id && (
-                          <div className={`absolute inset-0 z-10 rounded-xl shadow-sm transition-colors duration-200 ${
+                          <div className={`absolute inset-0 z-10 rounded-xl shadow-sm transition-colors duration-200  
+
+                            ${                             
                             darkMode 
                               ? 'bg-white' 
                               : 'bg-white shadow-[0_1px_4px_0px_rgba(0,0,0,0.075)]'
@@ -375,7 +387,7 @@ export default function Home() {
                         <span className={`pointer-events-none absolute top-13 left-1/2 z-10 block origin-top -translate-x-1/2 scale-90 rounded-lg px-1.5 py-1 text-xs leading-none font-medium opacity-0 transition-[transform,scale,opacity] duration-75 ease-out group-hover:scale-100 group-hover:opacity-100 ${
                           darkMode 
                             ? 'bg-gray-800 text-white' 
-                            : 'bg-gray-900 text-white'
+                            : 'bg-gray-100  text-black'
                         }`}>
                           {item.label}
                         </span>
@@ -391,14 +403,14 @@ export default function Home() {
 
                   <div className="flex items-center space-x-2">
                        
-                     <button className="max-[1100px]:hidden bg-gray-100 hover:bg-blue-200/50 text-black/70 hover:text-black  flex items-center justify-center rounded-md px-2 h-[28px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] ">
+                     <button className="max-[1100px]:hidden bg-gray-100 hover:bg-gray-500/15 text-black/70 hover:text-black  flex items-center justify-center rounded-md px-2 h-[28px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] ">
                         <svg className="h-5 w-5 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor">
                           <path d="M160 144C151.2 144 144 151.2 144 160L144 480C144 488.8 151.2 496 160 496L480 496C488.8 496 496 488.8 496 480L496 160C496 151.2 488.8 144 480 144L160 144zM96 160C96 124.7 124.7 96 160 96L480 96C515.3 96 544 124.7 544 160L544 480C544 515.3 515.3 544 480 544L160 544C124.7 544 96 515.3 96 480L96 160zM224 192C241.7 192 256 206.3 256 224C256 241.7 241.7 256 224 256C206.3 256 192 241.7 192 224C192 206.3 206.3 192 224 192zM360 264C368.5 264 376.4 268.5 380.7 275.8L460.7 411.8C465.1 419.2 465.1 428.4 460.8 435.9C456.5 443.4 448.6 448 440 448L200 448C191.1 448 182.8 443 178.7 435.1C174.6 427.2 175.2 417.6 180.3 410.3L236.3 330.3C240.8 323.9 248.1 320.1 256 320.1C263.9 320.1 271.2 323.9 275.7 330.3L292.9 354.9L339.4 275.9C343.7 268.6 351.6 264.1 360.1 264.1z"/>
                         </svg>
                         Gallery
                       </button>
 
-                      <button className=" flex max-[1100px]:hidden bg-gray-100 hover:bg-blue-200/50 text-black/70 hover:text-black   items-center justify-center rounded-md px-2 h-[28px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)]  ">
+                      <button className=" flex max-[1100px]:hidden bg-gray-100 hover:bg-gray-500/15 text-black/70 hover:text-black   items-center justify-center rounded-md px-2 h-[28px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)]  ">
                        <Image
                           src="headset-svgrepo-com (1).svg"
                           alt="Support" 

@@ -5,6 +5,8 @@ import { useState } from 'react'
 
 interface GalleryProps {
   isDarkMode?: boolean
+  dark_text?: string
+
 }
 
 const demoApps = [
@@ -71,6 +73,7 @@ const demoApps = [
 ]
 
 export default function Gallery({ isDarkMode }: GalleryProps) {
+    const dark_text = '[rgb(115,115,115)]'
     const [isExpanded, setIsExpanded] = useState(true)
 
     const toggleExpanded = () => {
@@ -117,11 +120,11 @@ export default function Gallery({ isDarkMode }: GalleryProps) {
               <a 
                 className={`group flex h-full w-full flex-col gap-3.5 rounded-2xl p-3.5 transition-colors duration-100 ease-out ${
                   isDarkMode 
-                    ? 'hover:bg-gray-700' 
+                    ? `hover:bg-[rgb(115,115,115)]/10`
+
                     : 'hover:bg-gray-100'
                 }`}
               >
-               
                 <Image
                 src={app.image}
                 alt="app.title" 
@@ -136,7 +139,7 @@ export default function Gallery({ isDarkMode }: GalleryProps) {
                   <h4 className={`text-base font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
                     {app.title}
                   </h4>
-                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <p className={`text-xs ${isDarkMode ? `text-${dark_text}` : 'text-gray-600'}`}>
                     {app.description}
                   </p>
                 </div>

@@ -44,7 +44,7 @@ const slides: CarouselSlide[] = [
     subtitle: 'Announcement',
     description: 'Free access to our new frontier AI image generator. Enjoy unparalleled photorealism, multi-language prompting, and ultra high resolutions.',
     buttonText: 'Generate images',
-    backgroundImage: '/carousel 4.webp',
+    backgroundImage: '/carousel 10.webp',
   },
   {
     id: 'carousel-slide-4',
@@ -71,7 +71,7 @@ const slides: CarouselSlide[] = [
     subtitle: 'New feature',
     description: 'Make your characters talk – upload a face, generate or record voices, and bring life into your generations. Powerful lip-syncing with Hedra. ',
     buttonText: 'Try Lip-sync',
-    backgroundImage: '/carousel 7.webp',
+    backgroundImage: '/carousel 8.webp',
    
   },
   {
@@ -80,7 +80,7 @@ const slides: CarouselSlide[] = [
     subtitle: 'New model',
     description: 'Try out Krea\'s new powerful generative enhancer, upscale to 22K resolution with Topaz, or save credits with super fast models.',
     buttonText: 'Upscale & Enhance',
-    backgroundImage: '/carousel 8.webp',
+    backgroundImage: '/carousel 7.webp',
    
   },
     {
@@ -89,7 +89,7 @@ const slides: CarouselSlide[] = [
     subtitle: 'New feature',
     description: 'Build images with our new visual canvas & let ChatGPT interpret your sketches, annotations, and collages.',
     buttonText: 'Try ChatGPT Paint',
-    backgroundImage: '/carousel 9.webp',
+    backgroundImage: '/carousel 11.webp',
    
   }
 ]
@@ -99,45 +99,44 @@ interface CarouselProps {
 }
 
 export default function Carousel({ isDarkMode }: CarouselProps) {
-  // We'll track the actual slide index and the display index separately
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const clonesAtStart = 0
+  const clonesAtEnd = 2
+  const initialSlideIndex = clonesAtStart
+
+  const [currentSlide, setCurrentSlide] = useState(initialSlideIndex) 
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const [isTransitioning, setIsTransitioning] = useState(true)
+  const [isTransitioning, setIsTransitioning] = useState(false) 
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const trackRef = useRef<HTMLDivElement | null>(null)
   const firstSlideRef = useRef<HTMLDivElement | null>(null)
   const [translatePx, setTranslatePx] = useState(0)
-
-  const clonesAtStart = 2
-  const clonesAtEnd = 2
   
   const extendedSlides = [
-   
     ...slides.slice(-clonesAtStart),
     ...slides,
     ...slides.slice(0, clonesAtEnd)
   ]
 
-  const initialSlideIndex = clonesAtStart
-
   useEffect(() => {
-    if (currentSlide === 0) {
-      setIsTransitioning(false)
-      setCurrentSlide(initialSlideIndex)
-      const timer = setTimeout(() => setIsTransitioning(true), 50)
-      return () => clearTimeout(timer)
-    }
+    const timer = setTimeout(() => {
+      setIsInitialized(true)
+      setIsTransitioning(true) 
+    }, 150)
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
-    if (!isAutoPlaying) return
-    const t = setInterval(() => {
+    if (!isAutoPlaying || !isInitialized) return
+    const timer = setInterval(() => {
       setCurrentSlide(prev => prev + 1)
     }, 5000)
-    return () => clearInterval(t)
-  }, [isAutoPlaying])
+    return () => clearInterval(timer)
+  }, [isAutoPlaying, isInitialized])
 
   useEffect(() => {
+    if (!isInitialized) return
+
     if (currentSlide >= slides.length + initialSlideIndex) {
       const timer = setTimeout(() => {
         setIsTransitioning(false)
@@ -152,13 +151,12 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
       const timer = setTimeout(() => {
         setIsTransitioning(false)
         setCurrentSlide(slides.length + initialSlideIndex - 1)
-        // Re-enable transitions
         const timer2 = setTimeout(() => setIsTransitioning(true), 50)
         return () => clearTimeout(timer2)
       }, 600) 
       return () => clearTimeout(timer)
     }
-  }, [currentSlide, initialSlideIndex])
+  }, [currentSlide, initialSlideIndex, isInitialized])
 
   const goToSlide = (index: number) => {
     setCurrentSlide(initialSlideIndex + index)
@@ -175,7 +173,7 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
   const recalc = () => {
     const track = trackRef.current
     const first = firstSlideRef.current
-    if (!track || !first) return
+    if (!track || !first || !isInitialized) return 
 
     const slideWidth = first.getBoundingClientRect().width
     const gapStr = window.getComputedStyle(track).gap || '0px'
@@ -185,16 +183,18 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
   }
 
   useEffect(() => {
+    if (!isInitialized) return 
     recalc()
     const onResize = () => recalc()
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [currentSlide])
+  }, [currentSlide, isInitialized])
 
   useEffect(() => {
-    const t = setTimeout(recalc, 150)
-    return () => clearTimeout(t)
-  }, [])
+    if (!isInitialized) return 
+    const timer = setTimeout(recalc, 50)
+    return () => clearTimeout(timer)
+  }, [isInitialized])
 
   const activeDotIndex = ((currentSlide - initialSlideIndex) % slides.length + slides.length) % slides.length
 
@@ -228,8 +228,8 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
                 backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 50%), url('${slide.backgroundImage}')`
               }}
             >
-                {/* the image */}
-                <div className="relative w-full h-56 sm:h-[46vh]">
+              {/* the image */}
+              <div className="relative w-full h-56 sm:h-[46vh] overflow-hidden">
                 <Image
                   src={slide.backgroundImage}
                   alt={slide.title}
@@ -237,7 +237,7 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
                   priority={idx === initialSlideIndex} 
                   quality={90}
                   sizes="(max-width: 640px) 100vw, (max-width: 768px) 75vw, (max-width: 1024px) 66vw, 60vw"
-                  className="object-cover object-center"
+                  className="object-cover object-center transition-transform duration-300 ease-out group-hover/card:scale-110"
                   onLoad={() => recalc()}
                 />
               </div>
@@ -310,14 +310,14 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
 
       {/* controls */}
       <div className="mt-4 hidden  sm:flex items-center justify-center relative">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {slides.map((_, i) => (
             <button
               key={i}
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => goToSlide(i)}
-              className={`h-2 w-2 rounded-full transition-transform duration-100 ease-out group-hover:scale-125 ${i === activeDotIndex ? (isDarkMode ? 'bg-white' : 'bg-gray-900')
-                    : (isDarkMode ? 'bg-gray-600' : 'bg-gray-300')
+              className={`h-2 w-2 rounded-full transition-transform duration-100 ease-out hover:scale-125 ${i === activeDotIndex ? (isDarkMode ? 'bg-white' : 'bg-gray-900')
+                    : (isDarkMode ? 'bg-[rgb(115,115,115)]/50' : 'bg-gray-300')
                 }`}
             />
           ))}
@@ -329,7 +329,7 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
             onClick={goToPrevious}
             className={`flex h-7 w-7 items-center justify-center rounded-full duration-150 ease-out transition-colors ${
               isDarkMode 
-                ? 'bg-gray-800 text-white hover:bg-gray-700' 
+                ? 'bg-[rgb(115,115,115)]/20 text-white hover:bg-[rgb(115,115,115)]/40' 
                 : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
             }`}
             aria-label="Previous slide"
@@ -343,7 +343,7 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
             onClick={goToNext}
             className={`flex h-7 w-7 items-center justify-center rounded-full duration-150 ease-out transition-colors ${
               isDarkMode 
-                ? 'bg-gray-800 text-white hover:bg-gray-700' 
+                ? 'bg-[rgb(115,115,115)]/20 text-white hover:bg-[rgb(115,115,115)]/40' 
                 : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
             }`}
             aria-label="Next slide"
