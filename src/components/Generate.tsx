@@ -1,5 +1,5 @@
 'use client'
-
+import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
 interface GenerateProps {
@@ -173,9 +173,35 @@ export default function Generate({ isDarkMode }: GenerateProps) {
       </div>
 
       {/* Navigation */}
+      <AnimatePresence>
       {isExpanded && (
-        <nav 
-          id="all-apps-accordion"
+        <motion.nav 
+           id="all-apps-accordion"
+      key="all-apps-accordion"
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={{
+        hidden: { opacity: 0, y: 12, scale: 0.995 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: {
+            duration: 0.28,
+            ease: [0.2, 0.8, 0.2, 1],
+            // stagger child items for a cascade effect
+            staggerChildren: 0.04,
+            delayChildren: 0.02
+          }
+            },
+            exit: {
+              opacity: 0,
+              y: 8,
+              scale: 0.995,
+              transition: { duration: 0.18, ease: 'easeInOut' }
+            }
+          }}
           className="mx-auto flex w-full origin-bottom transform items-center justify-center transition-[translate,scale,opacity] duration-400 ease-out animate-in slide-in-from-bottom-4"
         >
           <menu className="-mx-3.5 grid grid-flow-row grid-cols-1 gap-0.5 min-[600px]:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4">
@@ -226,8 +252,9 @@ export default function Generate({ isDarkMode }: GenerateProps) {
               </li>
             ))}
           </menu>
-        </nav>
+        </motion.nav>
       )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -2,6 +2,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface GalleryProps {
   isDarkMode?: boolean
@@ -109,9 +110,38 @@ export default function Gallery({ isDarkMode }: GalleryProps) {
           Show all
         </button>
       </div>
+      <AnimatePresence>
 
         {isExpanded && (
-      <nav className="mx-auto flex w-full origin-bottom transform items-center justify-center transition-[translate,scale,opacity] duration-400 ease-out animate-in slide-in-from-bottom-4">
+      <motion.nav 
+            id="all-apps-accordion"
+      key="all-apps-accordion"
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={{
+        hidden: { opacity: 0, y: 12, scale: 0.995 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: {
+            duration: 0.28,
+            ease: [0.2, 0.8, 0.2, 1],
+            staggerChildren: 0.04,
+            delayChildren: 0.02
+          }
+        },
+        exit: {
+          opacity: 0,
+          y: 8,
+          scale: 0.995,
+          transition: { duration: 0.18, ease: 'easeInOut' }
+        }
+      }}
+
+      
+      className="mx-auto flex w-full origin-bottom transform items-center justify-center transition-[translate,scale,opacity] duration-400 ease-out animate-in slide-in-from-bottom-4">
         <menu className="-mx-3.5 grid grid-flow-row grid-cols-2 gap-x-0.5 px-1 gap-y-2.5 max-[639px]:p-[30px] min-[536px]:p-[30px] md:grid-cols-4 md:px-0 lg:grid-cols-5 lg:px-0 xl:grid-cols-6 xl:px-0">
           {demoApps.map((app) => (
             <li key={app.id}>
@@ -145,8 +175,10 @@ export default function Gallery({ isDarkMode }: GalleryProps) {
             </li>
           ))}
         </menu>
-      </nav>
+      </motion.nav>
         )}
+      </AnimatePresence>
+
     </div>
   )
 }

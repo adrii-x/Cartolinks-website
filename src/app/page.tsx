@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import Main from '../components/Main'; 
 import Image from 'next/image'
 import RenameDialog from '../components/RenameDialog' 
+import { motion, AnimatePresence } from 'framer-motion'
+
 
 
 
@@ -304,9 +306,21 @@ export default function Home() {
                         </div>
                       </div>
 
+                    <AnimatePresence>
 
                           {workspaceDropdownstatus && (
-                    <div className={`absolute top-full left-[10px] mt-2 w-60 rounded-[10px] backdrop-blur-2xl shadow-lg z-50 border transition-colors duration-300 ${
+                    <motion.div
+                    key="profile-dropdown"
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    style={{ transformOrigin: 'top right' }}
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.96, y: -6 },
+                      visible: { opacity: 1, scale: 1, y: 0 },
+                      exit: { opacity: 0, scale: 0.98, y: -4 }
+                    }}
+                    className={`absolute top-full left-[10px] mt-2 w-60 rounded-[10px] backdrop-blur-2xl shadow-lg z-50 border transition-colors duration-300 ${
                       darkMode 
                         ? 'bg-[rgb(115,115,115)]/20  border-gray-200/15  text-white shadow-none' 
                         : 'bg-white/25  border-gray-200 text-gray-900 shadow-[0_2px_8px_0px_rgba(0,0,0,0.1)]'
@@ -400,8 +414,11 @@ export default function Home() {
                       <div className="font-medium">Create a new team</div>
                     </button>
                   </div>
-                </div>
+                </motion.div>
               )}
+
+                  </AnimatePresence>
+
 
 
                     </div> 
@@ -572,12 +589,26 @@ export default function Home() {
                         className="hidden"
                       />
 
+                        <AnimatePresence>
 
                       {dropdownstatus && (
                         
 
                         
-                  <div className={`absolute right-[-10px] backdrop-blur-2xl mt-2 w-48 rounded-[10px] shadow-lg z-50 border transition-colors duration-300 p-1 ${
+                  <motion.div 
+                  key="profile-dropdown"
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  // origin so it scales from the top-right corner
+                  style={{ transformOrigin: 'top right' }}
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.96, y: -6 },
+                    visible: { opacity: 1, scale: 1, y: 0 },
+                    exit: { opacity: 0, scale: 0.98, y: -4 }
+                  }}
+                  transition={{ duration: 0.30, ease: [0.2, 0.8, 0.2, 1] }}
+                  className={`absolute right-[-10px] backdrop-blur-2xl mt-2 w-48 rounded-[10px] shadow-lg z-50 border transition-colors duration-300 p-1 ${
                     darkMode 
                       ? 'bg-[rgb(115,115,115)]/20  border-gray-200/15 text-white shadow-none' 
                       : 'bg-white/25 border-gray-200 text-gray-900 shadow-[0_2px_8px_0px_rgba(0,0,0,0.1)]'
@@ -688,9 +719,9 @@ export default function Home() {
                      
 
                     </div>
-                  </div>
+                  </motion.div>
                 )}
-
+                </AnimatePresence>
                       
                     </div>
 
