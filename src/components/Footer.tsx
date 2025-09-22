@@ -182,7 +182,7 @@ export default function Footer({ isDarkMode }: FooterProps) {
 
         <div className={`flex flex-wrap items-center justify-between gap-4 border-t pt-4 text-xs font-medium ${
           isDarkMode 
-            ? `border-${dark_text}/25  text-${dark_text}`
+            ? `border-[rgb(115,115,115)]/25  text-[rgb(115,115,115)]`
             : 'border-gray-200 text-gray-400'
         }`}>
           <p>By Adrian Okonkwo</p>

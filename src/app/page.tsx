@@ -2,18 +2,50 @@
 import { useState, useRef, useEffect } from "react";
 import Main from '../components/Main'; 
 import Image from 'next/image'
+import RenameDialog from '../components/RenameDialog' 
+
 
 
 export default function Home() {
   const [darkMode, setdarkMode] = useState(false)
   const [profileImage, setProfileImage] = useState('avatar.svg')
   const [activeTab, setActiveTab] = useState('home')
-  const [activeName, setactiveName] = useState('John Doe')
+  const [activeName, setactiveName] = useState('Adrian Okonkwo')
   const [dropdownstatus, setdropdownstatus] = useState(false)
   const [workspaceDropdownstatus, setworkspaceDropdownstatus] = useState(false)
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const workspaceDropdownRef = useRef<HTMLDivElement>(null);
+  const [dialog, setdialog] = useState(false)
 
+  
+  const MOBILE_BREAKPOINT_notif = 490;
+  const TABLET_BREAKPOINT_notif = 731;
+  const MOBILE_BREAKPOINT_mode = 490;
+  const TABLET_BREAKPOINT_mode = 601;
+
+
+  const useScreenRange = (minWidth_notif: number, maxWidth_notif: number,minWidth_mode: number,maxWidth_mode: number) => {
+  const [isInRange, setIsInRange] = useState(false);
+    const [isInRangeMode, setIsInRangeMode] = useState(false);
+
+
+  useEffect(() => {
+          const checkWidth = () => {
+            const width = window.innerWidth;
+            setIsInRange(width > minWidth_notif && width < maxWidth_notif);
+            setIsInRangeMode(width > minWidth_mode && width < maxWidth_mode);
+          };
+
+          checkWidth();
+
+          window.addEventListener("resize", checkWidth);
+          return () => window.removeEventListener("resize", checkWidth);
+        }, [minWidth_notif, maxWidth_notif,minWidth_mode,maxWidth_mode]);
+
+        return [isInRange, isInRangeMode];
+      };
+
+  const [isInRange, isInRangeMode] = useScreenRange(MOBILE_BREAKPOINT_notif, TABLET_BREAKPOINT_notif,MOBILE_BREAKPOINT_mode, TABLET_BREAKPOINT_mode);
 
  useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -34,6 +66,12 @@ export default function Home() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []); 
+
+  const handleModalSave = (payload: { newName: string; profileImage: string }) => {
+  setactiveName(payload.newName)
+  if (payload.profileImage) setProfileImage(payload.profileImage)
+  else setProfileImage('/avatar.svg') 
+}
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0]
@@ -137,10 +175,18 @@ export default function Home() {
   
   return (
     <div className={`min-h-screen relative ${darkMode ? 'bg-[rgb(16,16,16)] ' : 'bg-white'} transition-colors duration-300`}>
+        <RenameDialog
+          darkMode={darkMode}
+          open={dialog}
+          profileImage={profileImage}
+          currentName={activeName}
+          onClose={() => setdialog(false)}
+          onSave={handleModalSave}
+        />
 
-                  <nav className={` min-[500px]:hidden fixed buttom-0 left-0 right-0 bottom-0 flex items-center w-full pb-2 pt-2 justify-center rounded-2xl backdrop-blur-2xl transition-colors duration-300 px-1.5 py-1.5 z-90 ${
-                darkMode 
-                  ? 'bg-gray-700/80 border border-gray-600/50' 
+                  <nav className={` min-[500px]:hidden fixed buttom-0 left-0 right-0 bottom-0 flex items-center w-full pb-2 pt-2 justify-center rounded-tl-2xl rounded-tr-2xl  backdrop-blur-2xl transition-colors duration-300 px-1.5 py-1.5 z-90 ${
+                 darkMode 
+                  ? 'bg-[rgb(115,115,115)]/20  border-[rgb(115,115,115)]' 
                   : 'bg-gray-100 border border-gray-200/50'
               }`}>
                 <ul className="flex list-none p-0 m-0 space-x-0">
@@ -160,10 +206,10 @@ export default function Home() {
                           activeTab === item.id
                             ? (darkMode ? 'text-gray-900' : 'text-gray-900')
                             : (darkMode ? 'text-white' : 'text-gray-700')
-                        } hover:${darkMode ? 'text-blue-400' : 'text-blue-600'}`}
+                        } `}
                         aria-label={`Open ${item.label}`}
                       >
-                        <div className="absolute inset-0 z-20 m-auto flex items-center justify-center">
+                        <div className={`absolute inset-0 z-20 m-auto flex items-center justify-center hover: hover: ${(activeTab === item.id)?'': darkMode? 'hover:bg-white/15' : 'hover:bg-gray-500/10'} rounded-xl mx-[2.1px]`}>
                           {item.icon}
                         </div>
                         
@@ -213,13 +259,12 @@ export default function Home() {
 
 
                     <div ref={workspaceDropdownRef} onClick={toggleWorkspaceDropdownStatus} className="flex items-center pl-5 max-[812px]:hidden relative" >  
-                       <button  className=" hover:bg-blue-200/50 text-black/70 hover:text-black  md:flex items-center justify-center rounded-md   text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] p-[1.5px]">
+                       <button  className="  text-black/70 hover:text-black  md:flex items-center justify-center rounded-full  overflow-hidden  text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] p-[1.5px] w-[27.5px] h-[27.5px]">
                         <Image
                           src={profileImage}
                           alt="Profile" 
-                          width={27.5}
-                          height={27.5}
-                          className="opacity-70"
+                          fill
+                          className="opacity-70 object-cover"
                         />
                         </button>
                         <div className={`
@@ -261,38 +306,40 @@ export default function Home() {
 
 
                           {workspaceDropdownstatus && (
-                    <div className={`absolute top-full left-[10px] mt-2 w-60 rounded-[10px] shadow-lg z-50 border transition-colors duration-300 ${
+                    <div className={`absolute top-full left-[10px] mt-2 w-60 rounded-[10px] backdrop-blur-2xl shadow-lg z-50 border transition-colors duration-300 ${
                       darkMode 
-                        ? 'bg-gray-800 border-gray-700 text-white shadow-none' 
-                        : 'bg-white border-gray-200 text-gray-900 shadow-[0_2px_8px_0px_rgba(0,0,0,0.1)]'
+                        ? 'bg-[rgb(115,115,115)]/20  border-gray-200/15  text-white shadow-none' 
+                        : 'bg-white/25  border-gray-200 text-gray-900 shadow-[0_2px_8px_0px_rgba(0,0,0,0.1)]'
                     }`}>
                       <div className="flex flex-col gap-0.5 px-2.5 py-2.5">
                         <div className={`px-1 py-1 text-xs font-medium ${
-                          darkMode ? 'text-gray-400' : 'text-gray-500'
+                          darkMode ? 'text-[rgb(115,115,115)]' : 'text-gray-500'
                         }`} >
                           Workspaces
                         </div>
 
 
-                        <div className="group flex w-full">
+                        <div onClick={() => setdialog(true)} className="group flex w-full cursor-pointer">
                           <div 
                             className={`flex w-full items-center gap-2 rounded-md py-[3.8px] pr-1.5 pl-2 text-xs transition-colors duration-100 ease-out ${
                               darkMode 
-                                ? 'bg-gray-600' 
-                                : 'bg-gray-200'
+                                ? 'bg-[rgb(115,115,115)]/60' 
+                                : 'bg-gray-200/65'
                             }`}
                           >
-                            <div className={`flex h-6 w-6 items-center justify-center overflow-hidden rounded-md ${
+                             <div className="relative w-[27.5px] h-[27.5px] shrink-0 rounded-full overflow-hidden"> 
+                            <div className={`w-full h-full rounded-full overflow-hidden ${
                               darkMode ? 'bg-gray-600' : 'bg-gray-200'
                             }`}>
-                                <Image
-                                  src={profileImage}
-                                  alt="Profile" 
-                                  width={27.5}
-                                  height={27.5}
-                                  className="opacity-70"
-                                />
+                              <Image
+                                src={profileImage}
+                                alt="Profile" 
+                                fill
+                                sizes="27.5px"
+                                className="opacity-80 object-cover"
+                              />
                             </div>
+                          </div>
                             <div className="flex flex-col items-start">
                               <div className="max-w-[140px] truncate text-xs leading-none font-medium text-ellipsis">
                                 {activeName}
@@ -302,22 +349,34 @@ export default function Home() {
                               <div 
                                 className={`flex h-[30px] w-[30px] items-center justify-center rounded-lg transition-colors duration-150 ease-[cubic-bezier(.33,0,.2,1)] cursor-pointer ${
                                   darkMode 
-                                    ? 'hover:bg-gray-600 text-white/80 hover:text-white' 
-                                    : 'hover:bg-gray-250 text-black/70 hover:text-black'
+                                    ? ' text-white/80 hover:text-white' 
+                                    : ' text-black/70 hover:text-black'
                                 }`}
                                 
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" 
-                                  className="transition-transform duration-200 ease-out group-hover/settings:rotate-45" 
-                                  width="18" 
-                                  height="18" 
-                                  viewBox="0 0 24 24" 
-                                  fill="currentColor"
-                                >
-                                </svg>
+                                      <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      aria-hidden="true"
+                                      role="img"
+                                      className="transition-[rotate] delay-[100ms] duration-200 ease-out group-hover:rotate-45"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        fill="currentColor"
+                                        fillRule="evenodd"
+                                        d="M14.279 2.152C13.909 2 13.439 2 12.5 2s-1.408 0-1.779.152a2 2 0 0 0-1.09 1.083c-.094.223-.13.484-.145.863a1.62 1.62 0 0 1-.796 1.353a1.64 1.64 0 0 1-1.579.008c-.338-.178-.583-.276-.825-.308a2.03 2.03 0 0 0-1.49.396c-.318.242-.553.646-1.022 1.453c-.47.807-.704 1.21-.757 1.605c-.07.526.074 1.058.4 1.479c.148.192.357.353.68.555c.477.297.783.803.783 1.361s-.306 1.064-.782 1.36c-.324.203-.533.364-.682.556a2 2 0 0 0-.399 1.479c.053.394.287.798.757 1.605s.704 1.21 1.022 1.453c.424.323.96.465 1.49.396c.242-.032.487-.13.825-.308a1.64 1.64 0 0 1 1.58.008c.486.28.774.795.795 1.353c.015.38.051.64.145.863c.204.49.596.88 1.09 1.083c.37.152.84.152 1.779.152s1.409 0 1.779-.152a2 2 0 0 0 1.09-1.083c.094-.223.13-.483.145-.863c.02-.558.309-1.074.796-1.353a1.64 1.64 0 0 1 1.579-.008c.338.178.583.276.825.308c.53.07 1.066-.073 1.49-.396c.318-.242.553-.646 1.022-1.453c.47-.807.704-1.21.757-1.605a2 2 0 0 0-.4-1.479c-.148-.192-.357-.353-.68-.555c-.477-.297-.783-.803-.783-1.361s.306-1.064.782-1.36c.324-.203.533-.364.682-.556a2 2 0 0 0 .399-1.479c-.053-.394-.287-.798-.757-1.605s-.704-1.21-1.022-1.453a2.03 2.03 0 0 0-1.49-.396c-.242.032-.487.13-.825.308a1.64 1.64 0 0 1-1.58-.008a1.62 1.62 0 0 1-.795-1.353c-.015-.38-.051-.64-.145-.863a2 2 0 0 0-1.09-1.083M12.5 15c1.67 0 3.023-1.343 3.023-3S14.169 9 12.5 9s-3.023 1.343-3.023 3s1.354 3 3.023 3"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+
                               </div>
                             </div>
                           </div>
+
+
+
                         </div>
 
                    
@@ -329,7 +388,7 @@ export default function Home() {
                     }`}>
                       <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors duration-100 ${
                         darkMode 
-                          ? 'bg-gray-600 group-hover:bg-blue-500/15' 
+                          ? 'bg-[rgb(115,115,115)]/60 group-hover:bg-blue-500/15' 
                           : 'bg-gray-200 group-hover:bg-blue-500/10'
                       }`}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -354,7 +413,7 @@ export default function Home() {
                    <div className="absolute left-1/2  transform -translate-x-1/2 z-[10]  max-[500px]:hidden">
               <nav className={`flex items-center justify-center rounded-2xl backdrop-blur-2xl transition-colors duration-300 px-1.5 py-1.5 ${
                 darkMode 
-                  ? 'bg-gray-700/80 border border-gray-600/50' 
+                  ? 'bg-[rgb(115,115,115)]/20  border-[rgb(115,115,115)]' 
                   : 'bg-gray-100 border border-gray-200/50'
               }`}>
                 <ul className="flex lst-none p-0 m-0 space-x-0">
@@ -386,7 +445,7 @@ export default function Home() {
                         
                         <span className={`pointer-events-none absolute top-13 left-1/2 z-10 block origin-top -translate-x-1/2 scale-90 rounded-lg px-1.5 py-1 text-xs leading-none font-medium opacity-0 transition-[transform,scale,opacity] duration-75 ease-out group-hover:scale-100 group-hover:opacity-100 ${
                           darkMode 
-                            ? 'bg-gray-800 text-white' 
+                            ? 'bg-[rgb(115,115,115)]/20 text-white' 
                             : 'bg-gray-100  text-black'
                         }`}>
                           {item.label}
@@ -403,14 +462,14 @@ export default function Home() {
 
                   <div className="flex items-center space-x-2">
                        
-                     <button className="max-[1100px]:hidden bg-gray-100 hover:bg-gray-500/15 text-black/70 hover:text-black  flex items-center justify-center rounded-md px-2 h-[28px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] ">
+                     <button className="max-[1100px]:hidden bg-gray-100 hover:bg-gray-100/55 text-black/70 hover:text-black  flex items-center justify-center rounded-md px-2 h-[28px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] ">
                         <svg className="h-5 w-5 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor">
                           <path d="M160 144C151.2 144 144 151.2 144 160L144 480C144 488.8 151.2 496 160 496L480 496C488.8 496 496 488.8 496 480L496 160C496 151.2 488.8 144 480 144L160 144zM96 160C96 124.7 124.7 96 160 96L480 96C515.3 96 544 124.7 544 160L544 480C544 515.3 515.3 544 480 544L160 544C124.7 544 96 515.3 96 480L96 160zM224 192C241.7 192 256 206.3 256 224C256 241.7 241.7 256 224 256C206.3 256 192 241.7 192 224C192 206.3 206.3 192 224 192zM360 264C368.5 264 376.4 268.5 380.7 275.8L460.7 411.8C465.1 419.2 465.1 428.4 460.8 435.9C456.5 443.4 448.6 448 440 448L200 448C191.1 448 182.8 443 178.7 435.1C174.6 427.2 175.2 417.6 180.3 410.3L236.3 330.3C240.8 323.9 248.1 320.1 256 320.1C263.9 320.1 271.2 323.9 275.7 330.3L292.9 354.9L339.4 275.9C343.7 268.6 351.6 264.1 360.1 264.1z"/>
                         </svg>
                         Gallery
                       </button>
 
-                      <button className=" flex max-[1100px]:hidden bg-gray-100 hover:bg-gray-500/15 text-black/70 hover:text-black   items-center justify-center rounded-md px-2 h-[28px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)]  ">
+                      <button className=" flex max-[1100px]:hidden bg-gray-100 hover:bg-gray-100/55 text-black/70 hover:text-black   items-center justify-center rounded-md px-2 h-[28px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)]  ">
                        <Image
                           src="headset-svgrepo-com (1).svg"
                           alt="Support" 
@@ -425,7 +484,7 @@ export default function Home() {
                        <button
                          className={`hidden max-[490px]:flex min-[731px]:flex h-[30px] w-[30px] items-center justify-center rounded-lg backdrop-blur-lg transition-colors duration-150 ease-[cubic-bezier(.33,0,.2,1)] relative ${
                             darkMode 
-                              ? 'bg-gray-800/75 hover:bg-gray-700/75 text-white/80 hover:text-white' 
+                              ? 'bg-[rgb(115,115,115)]/15 hover:bg-[rgb(115,115,115)]/30 text-white/80 hover:text-white' 
                               : 'bg-gray-100/75 hover:bg-gray-200/75 text-black/70 hover:text-black'
                           }`}
                           title="Notifications"
@@ -442,7 +501,7 @@ export default function Home() {
                         className={`hidden max-[490px]:flex min-[601px]:flex h-[30px] w-[30px] items-center justify-center rounded-lg backdrop-blur-lg transition-colors duration-150 ease-[cubic-bezier(.33,0,.2,1)] ${
 
                         darkMode 
-                          ? 'bg-gray-800/75 hover:bg-gray-700/75 text-white/80 hover:text-white' 
+                          ? 'bg-[rgb(115,115,115)]/15 hover:bg-[rgb(115,115,115)]/30 text-white/80 hover:text-white' 
                           : 'bg-gray-100/75 hover:bg-gray-200/75 text-black/70 hover:text-black'
                       }`}
                       title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -471,13 +530,18 @@ export default function Home() {
 
 
                     <div ref={profileDropdownRef} className='relative'>
-                      <button onClick={toggleDropdownStatus} className="bg-gray-100 hover:bg-blue-200/50 text-black/70 hover:text-black  md:flex items-center justify-center rounded-md   text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] p-[1.5px]">
+                      <button onClick={toggleDropdownStatus} className={` ${
+                         darkMode 
+                            ? 'bg-[rgb(115,115,115)]/15 hover:bg-[rgb(115,115,115)]/30 ' 
+                            : 'bg-gray-100 hover:bg-gray-150'
+                      }
+                        
+                         text-black/70 hover:text-black  md:flex items-center justify-center  overflow-hidden rounded-full  w-[28.5px] h-[28.5px] text-sm font-medium backdrop-blur-lg transition-colors duration-300 ease-[cubic-bezier(.33,0,.2,1)] p-[1.5px]`} >
                         <Image
                           src={profileImage}
-                          alt="Support" 
-                          width={28.5}
-                          height={28.5}
-                          className="opacity-70"
+                          alt="Profile" 
+                          fill
+                          className="opacity-80 object-cover"
                         />
                         
                       </button>
@@ -489,9 +553,9 @@ export default function Home() {
                             uploadInput.click()
                           }
                         }}
-                        className={`absolute -top-1 -right-1 w-[12px] h-[12px] rounded-full flex items-center justify-center text-xs transition-colors duration-200  ${
+                        className={`absolute -top-[2.1px] -right-[2px] w-[12px] h-[12px] rounded-full flex items-center justify-center text-xs transition-colors duration-200  ${
                           darkMode 
-                            ? 'bg-gray-600 hover:bg-gray-500 text-white' 
+                            ? 'bg-[rgb(115,115,115)]/60 hover:border-[rgb(115,115,115)]/90 text-white' 
                             : 'bg-gray-500 hover:bg-gray-600 text-white'
                         }`}
                         title="Change profile picture">
@@ -513,17 +577,17 @@ export default function Home() {
                         
 
                         
-                  <div className={`absolute right-[-10px] mt-2 w-48 rounded-[10px] shadow-lg z-50 border transition-colors duration-300 p-1 ${
+                  <div className={`absolute right-[-10px] backdrop-blur-2xl mt-2 w-48 rounded-[10px] shadow-lg z-50 border transition-colors duration-300 p-1 ${
                     darkMode 
-                      ? 'bg-gray-800 border-gray-700 text-white shadow-none' 
-                      : 'bg-white border-gray-200 text-gray-900 shadow-[0_2px_8px_0px_rgba(0,0,0,0.1)]'
+                      ? 'bg-[rgb(115,115,115)]/20  border-gray-200/15 text-white shadow-none' 
+                      : 'bg-white/25 border-gray-200 text-gray-900 shadow-[0_2px_8px_0px_rgba(0,0,0,0.1)]'
                   }`}>
                     <div className="text-sm">
                       <div
                         className={`flex h-11 cursor-pointer items-center justify-start gap-2.5 rounded-md px-3 transition-colors duration-200 ${
                           darkMode 
-                            ? 'hover:bg-gray-700' 
-                            : 'hover:bg-gray-100'
+                            ? 'hover:bg-[rgb(115,115,115)]/60' 
+                            : 'hover:bg-white/75'
                         }`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -531,12 +595,56 @@ export default function Home() {
                         </svg>
                         Manage account
                       </div>
+
+                       {isInRangeMode ? (<div
+                        onClick={toggleDarkMode}
+                        className={`flex h-11 cursor-pointer items-center justify-start gap-2.5 rounded-md px-3 transition-colors duration-200 ${
+                          darkMode 
+                              ? 'hover:bg-[rgb(115,115,115)]/60' 
+                            : 'hover:bg-white/75'
+
+                        }`}
+                      >
+                        {darkMode ? 
+                                ( <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" fill="currentColor">
+                            <path d="M 45 68 c -12.682 0 -23 -10.317 -23 -23 c 0 -12.682 10.318 -23 23 -23 c 12.683 0 23 10.318 23 23 C 68 57.683 57.683 68 45 68 z"/>
+                            <rect x="42" y="0" width="6" height="15.79"/>
+                            <rect x="42" y="74.21" width="6" height="15.79"/>
+                            <rect x="0" y="42" width="15.79" height="6"/>
+                            <rect x="74.21" y="42" width="15.79" height="6"/>
+                            <rect x="63.34" y="15.76" width="15.79" height="6" transform="rotate(-45 71.24 18.76)"/>
+                            <rect x="10.87" y="68.24" width="15.79" height="6" transform="rotate(-45 18.77 71.24)"/>
+                            <rect x="15.76" y="10.87" width="6" height="15.79" transform="rotate(-45 18.76 18.77)"/>
+                            <rect x="68.24" y="63.34" width="6" height="15.79" transform="rotate(-45 71.24 71.24)"/>
+                                </svg>) : 
+                                ( <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" fill="currentColor">
+                                <path d="M 87.823 60.7 c -0.463 -0.423 -1.142 -0.506 -1.695 -0.214 c -15.834 8.398 -35.266 2.812 -44.232 -12.718 c -8.966 -15.53 -4.09 -35.149 11.101 -44.665 c 0.531 -0.332 0.796 -0.963 0.661 -1.574 c -0.134 -0.612 -0.638 -1.074 -1.259 -1.153 c -9.843 -1.265 -19.59 0.692 -28.193 5.66 C 13.8 12.041 6.356 21.743 3.246 33.35 S 1.732 57.08 7.741 67.487 c 6.008 10.407 15.709 17.851 27.316 20.961 C 38.933 89.486 42.866 90 46.774 90 c 7.795 0 15.489 -2.044 22.42 -6.046 c 8.601 -4.966 15.171 -12.43 18.997 -21.586 C 88.433 61.79 88.285 61.123 87.823 60.7 z"/>
+                              </svg>)}
+                                              {darkMode ? 'Light' : 'Dark'}  Mode
+                      </div>): null}
+
+                         {isInRange ? (
+                      <div
+                        className={`flex h-11 cursor-pointer items-center justify-start gap-2.5 rounded-md pr-3 pl-[10.5px] transition-colors duration-200 ${
+                          darkMode 
+                              ? 'hover:bg-[rgb(115,115,115)]/60' 
+                            : 'hover:bg-white/75'
+
+                        }`}
+                      >
+                        <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor">
+
+                            <path d="M320 64C302.3 64 288 78.3 288 96L288 99.2C215 114 160 178.6 160 256L160 277.7C160 325.8 143.6 372.5 113.6 410.1L103.8 422.3C98.7 428.6 96 436.4 96 444.5C96 464.1 111.9 480 131.5 480L508.4 480C528 480 543.9 464.1 543.9 444.5C543.9 436.4 541.2 428.6 536.1 422.3L526.3 410.1C496.4 372.5 480 325.8 480 277.7L480 256C480 178.6 425 114 352 99.2L352 96C352 78.3 337.7 64 320 64zM258 528C265.1 555.6 290.2 576 320 576C349.8 576 374.9 555.6 382 528L258 528z"/>
+                        </svg>
+                        Notification
+                      </div>): null}
                       
                       <div
                         className={`flex h-11 cursor-pointer items-center justify-start gap-2.5 rounded-md px-3 transition-colors duration-200 ${
                           darkMode 
-                            ? 'hover:bg-gray-700' 
-                            : 'hover:bg-gray-100'
+                              ? 'hover:bg-[rgb(115,115,115)]/60' 
+                            : 'hover:bg-white/75'
+
                         }`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 56 56" fill="currentColor">
@@ -548,8 +656,8 @@ export default function Home() {
                       <div
                         className={`flex h-11 cursor-pointer items-center justify-start gap-2.5 rounded-md px-3 transition-colors duration-200 ${
                           darkMode 
-                            ? 'hover:bg-gray-700' 
-                            : 'hover:bg-gray-100'
+                            ? 'hover:bg-[rgb(115,115,115)]/60' 
+                            : 'hover:bg-white/75' 
                         }`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
@@ -559,14 +667,14 @@ export default function Home() {
                       </div>
 
                       <hr className={`mx-1 my-1 border-t ${
-                        darkMode ? 'border-gray-700' : 'border-gray-200'
+                        darkMode ? 'border-[rgb(115,115,115)]/70' : 'border-gray-200'
                       }`} />
                       
                       <div
                         className={`flex h-11 cursor-pointer items-center justify-start gap-2.5 rounded-md px-3 transition-colors duration-200 ${
                           darkMode 
-                            ? 'text-red-400 hover:bg-gray-700' 
-                            : 'text-red-600 hover:bg-gray-100'
+                            ? 'text-red-400 hover:bg-[rgb(115,115,115)]/60' 
+                            : 'text-red-600 hover:bg-white/75'
                         }`}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.625" strokeLinecap="round" strokeLinejoin="round">
