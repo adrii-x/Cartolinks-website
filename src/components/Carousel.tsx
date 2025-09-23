@@ -188,12 +188,14 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
     const onResize = () => recalc()
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSlide, isInitialized])
 
   useEffect(() => {
     if (!isInitialized) return 
     const timer = setTimeout(recalc, 50)
     return () => clearTimeout(timer)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized])
 
   const activeDotIndex = ((currentSlide - initialSlideIndex) % slides.length + slides.length) % slides.length

@@ -19,6 +19,7 @@ export default function Home() {
   const workspaceDropdownRef = useRef<HTMLDivElement>(null);
   const [dialog, setdialog] = useState(false)
 
+
   
   const MOBILE_BREAKPOINT_notif = 490;
   const TABLET_BREAKPOINT_notif = 731;
@@ -724,16 +725,6 @@ export default function Home() {
                 </AnimatePresence>
                       
                     </div>
-
-
-
-
-
-
-
-
-
-
 
                   </div>
 
