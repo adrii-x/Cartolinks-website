@@ -34,12 +34,12 @@ export default function Footer({ isDarkMode }: FooterProps) {
                     </li>
                     <li>
                         <a href="/pricing/teams" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
-                        Krea Teams
+                        Teams
                         </a>
                     </li>
                     <li>
                         <a href="/enterprise" className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
-                        Krea Enterprise
+                        Enterprise
                         </a>
                     </li>
                     <li>
