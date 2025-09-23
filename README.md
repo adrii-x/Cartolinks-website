@@ -5,6 +5,10 @@ A modern, responsive web app built with **Next.js**, **React**, and **Tailwind C
 It features smooth animations powered by **Framer Motion**, dark mode support, user profile editing (image + name), a seamless infinite carousel, and modular UI components like **Generate**, **Gallery**, **Footer**, and **Rename Dialog Box**.
 
 ---
+## Live Demo
+
+https://github.com/user-attachments/assets/ff2be0ca-03ad-4d3d-b1ae-1a01e93e7f91
+
 
 ## 📑 Table of Contents
 - [Overview](#overview)
