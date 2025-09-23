@@ -93,7 +93,7 @@ const tools = [
     bgColor: "bg-gray-700",
     badge: "New",
     icon: (
-  <svg width="42" height="42" className="absolute inset-0 z-10 m-auto shrink-0 text-white" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" >
+  <svg width="42" height="42" className="absolute inset-0 z-1 m-auto shrink-0 text-white" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" >
     <path d="M23.6904 14.625C24.4364 14.625 25.1517 14.3287 25.6792 13.8012C26.2066 13.2738 26.5029 12.5584 26.5029 11.8125C26.5029 11.0666 26.2066 10.3512 25.6792 9.82376C25.1517 9.29632 24.4364 9 23.6904 9C22.9445 9 22.2291 9.29632 21.7017 9.82376C21.1742 10.3512 20.8779 11.0666 20.8779 11.8125C20.8779 12.5584 21.1742 13.2738 21.7017 13.8012C22.2291 14.3287 22.9445 14.625 23.6904 14.625Z" fill="currentColor"/>
     <path d="M19.8084 21.5699L18.2221 37.4156C18.1717 37.7942 18.2737 38.1775 18.5058 38.4809C18.7378 38.7844 19.081 38.9832 19.4596 39.0337C19.8383 39.0842 20.2215 38.9821 20.525 38.7501C20.8285 38.518 21.0273 38.1749 21.0778 37.7962L22.5965 28.6743C22.6383 28.4147 22.7712 28.1785 22.9713 28.008C23.1715 27.8375 23.4258 27.7439 23.6887 27.7439C23.9516 27.7439 24.2059 27.8375 24.4061 28.008C24.6062 28.1785 24.7391 28.4147 24.7809 28.6743L26.2996 37.7962C26.3501 38.1749 26.549 38.518 26.8524 38.7501C27.1559 38.9821 27.5391 39.0842 27.9178 39.0337C28.2964 38.9832 28.6396 38.7844 28.8716 38.4809C29.1037 38.1775 29.2057 37.7942 29.1553 37.4156L27.5709 21.5699C27.5307 21.1575 27.5821 20.7413 27.7215 20.351C27.8608 19.9607 28.0847 19.6061 28.3771 19.3124L33.0646 13.2824C33.296 12.9729 33.3982 12.5856 33.3499 12.2022C33.3015 11.8188 33.1063 11.4691 32.8053 11.2267C32.5044 10.9843 32.1211 10.868 31.7362 10.9024C31.3513 10.9369 30.9947 11.1192 30.7415 11.4112L26.7534 16.1999C26.5951 16.4046 26.3798 16.5579 26.1346 16.6406C25.7034 16.7793 24.8878 16.9706 23.6896 16.9706C22.4896 16.9706 21.6759 16.7793 21.2428 16.6406C20.9983 16.5576 20.7837 16.4043 20.6259 16.1999L16.6378 11.4112C16.387 11.1111 16.0285 10.9214 15.6393 10.883C15.2501 10.8445 14.8614 10.9603 14.5567 11.2055C14.2521 11.4507 14.0558 11.8057 14.0102 12.1941C13.9646 12.5825 14.0732 12.9733 14.3128 13.2824L19.0003 19.3124C19.5946 19.9049 19.8928 20.7337 19.8084 21.5699Z" fill="currentColor"
     />
@@ -204,7 +204,7 @@ export default function Generate({ isDarkMode }: GenerateProps) {
           }}
           className="mx-auto flex w-full origin-bottom transform items-center justify-center transition-[translate,scale,opacity] duration-400 ease-out animate-in slide-in-from-bottom-4"
         >
-          <menu className="-mx-3.5 grid grid-flow-row grid-cols-1 gap-0.5 min-[600px]:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4">
+          <menu className="-mx-3.5 grid grid-flow-row grid-cols-1 gap-0.5 min-[600px]:grid-cols-2 lg:grid-cols-4  xl:grid-cols-4">
             {tools.map((tool, index) => (
                 <li  key={tool.title}  className={` ${index >= 9 ? 'hidden xl:block' : ''} ${index >= 8 ? 'hidden lg:block xl:hidden' : ''} min-[1034px]:mx-1.5` }>
                 <a 
@@ -215,7 +215,7 @@ export default function Generate({ isDarkMode }: GenerateProps) {
                   }`}
                 >
                   <div 
-                    className={`relative aspect-square rounded-[10px]  block shrink-0 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_1px_5px_rgba(255,255,255,0.1)]  ${tool.no_border ? '' : 'ring-1 ring-black/10'}`}
+                    className={`relative ml-0.5 aspect-square rounded-[10px]  block shrink-0 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_1px_5px_rgba(255,255,255,0.1)]  ${tool.no_border ? '' : 'ring-1 ring-black/10'}`}
                     style={{
                       background: tool.gradient || '',
                       width: '42px',
@@ -228,20 +228,21 @@ export default function Generate({ isDarkMode }: GenerateProps) {
                   </div>
 
                   <div className="ml-2 h-full w-full">
-                    <h4 className={`mb-1 h-4 text-sm leading-none font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                      {tool.title}
-                      {tool.badge && (
-                        <span className="ml-1 inline-block rounded-md px-1.5 py-0.75 align-text-bottom text-xs leading-none font-medium text-white bg-blue-600">
-                          {tool.badge}
-                        </span>
-                      )}
-                    </h4>
-                    <p className={`text-[10.5px] leading-[14px] font-normal lg:w-41 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <h4 className={`mb-1 flex items-center h-4 text-sm leading-none font-medium ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                    <span className="truncate">{tool.title}</span>
+                    {tool.badge && (
+                      <span className="ml-1 shrink-0 inline-flex items-center rounded-md px-1.5 py-0.75 text-xs leading-none font-medium text-white bg-blue-600">
+                        {tool.badge}
+                      </span>
+                    )}
+                  </h4>
+
+                    <p className={`text-[9.5px] leading-[14px] font-normal lg:w-36 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       {tool.description}
                     </p>
                   </div>
 
-                  <button className={`ml-2 rounded-full px-6 py-2.5 text-xs leading-none font-medium transition-colors duration-100 ease-out ${
+                  <button className={`ml-2 mr-[2px] rounded-full px-6 py-2.5 text-xs leading-none font-medium transition-colors duration-100 ease-out ${
                     isDarkMode
                       ? 'bg-[rgb(115,115,115)]/20 text-white group-hover:bg-[rgb(115,115,115)]/10'
                       : 'bg-gray-100 text-black group-hover:bg-gray-200'

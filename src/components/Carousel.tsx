@@ -223,15 +223,15 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
               <a className="group/card block relative overflow-hidden rounded-2xl">
 
               <div
-              className={`relative flex h-64 max-h-[445px] w-full max-w-[848px] shrink-0 gap-3 overflow-hidden rounded-2xl bg-cover bg-center transition-[filter] duration-[500ms] ease-[cubic-bezier(.3,0,.2,1)] sm:aspect-[2/1] sm:h-[50vh] sm:rounded-3xl group-hover/card:brightness-130 ${
+              className={`relative flex h-64 max-h-[445px] w-full max-w-[848px] shrink-0 gap-3 overflow-hidden rounded-2xl bg-cover bg-center transition-[filter] duration-[500ms] ease-[cubic-bezier(.3,0,.2,1)] sm:aspect-[2/1] sm:h-[50vh] lg:h-[60vh]  sm:rounded-3xl group-hover/card:brightness-130 ${
                 isDarkMode ? 'bg-gray-600' : 'bg-gray-600'
               }`}
               style={{
-                backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 50%), url('${slide.backgroundImage}')`
+                backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 10%), url('${slide.backgroundImage}')`
               }}
             >
               {/* the image */}
-              <div className="relative w-full h-56 sm:h-[46vh] overflow-hidden">
+              <div className="relative w-full h-56 sm:h-[46vh] lg:h-[58vh] overflow-hidden">
                 <Image
                   src={slide.backgroundImage}
                   alt={slide.title}
@@ -252,6 +252,7 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
                   style={{
                     background:
                       'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.45) 20%, rgba(0,0,0,0.18) 40%, rgba(0,0,0,0) 70%)',
+                      
                   }}
                 />
 
@@ -277,10 +278,10 @@ export default function Carousel({ isDarkMode }: CarouselProps) {
 
                   <div className="flex items-end justify-between gap-4">
                     <div className="max-w-[55%]">
-                      <h3 className="text-lg  md:text-xl lg:text-3xl font-semibold text-white leading-tight hidden sm:block">
+                      <h3 className="text-lg  md:text-xl lg:text-2xl font-semibold text-white leading-tight hidden sm:block">
                         {slide.title}
                       </h3>
-                      <p className="text-[10px] md:text-xs lg:text-sm text-white/85 mt-2 ">{slide.description}</p>
+                      <p className="text-[10px] md:text-xs  lg:text-[14px] text-white/85 mt-2 ">{slide.description}</p>
                     </div>
 
                     <span className="
