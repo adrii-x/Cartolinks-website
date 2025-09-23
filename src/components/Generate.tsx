@@ -204,7 +204,7 @@ export default function Generate({ isDarkMode }: GenerateProps) {
           }}
           className="mx-auto flex w-full origin-bottom transform items-center justify-center transition-[translate,scale,opacity] duration-400 ease-out animate-in slide-in-from-bottom-4"
         >
-          <menu className="-mx-3.5 grid grid-flow-row grid-cols-1 gap-0.5 min-[600px]:grid-cols-2 lg:grid-cols-4  xl:grid-cols-4">
+          <menu className="-mx-3.5 grid grid-flow-row grid-cols-1 gap-0.5 min-[600px]:grid-cols-2 min-[1011px]:grid-cols-3 min-[1173px]:grid-cols-4">
             {tools.map((tool, index) => (
                 <li  key={tool.title}  className={` ${index >= 9 ? 'hidden xl:block' : ''} ${index >= 8 ? 'hidden lg:block xl:hidden' : ''} min-[1034px]:mx-1.5` }>
                 <a 
