@@ -7,8 +7,7 @@ It features smooth animations powered by **Framer Motion**, dark mode support, u
 ---
 ## Live Demo
 
-https://github.com/user-attachments/assets/ff2be0ca-03ad-4d3d-b1ae-1a01e93e7f91
-
+![Image](https://github.com/user-attachments/assets/92712e25-b0d7-4dd5-b344-0d5463aa5e73)
 
 ## 📑 Table of Contents
 - [Overview](#overview)
