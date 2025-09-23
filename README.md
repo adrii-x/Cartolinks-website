@@ -189,7 +189,7 @@ The easiest way to deploy this project is with **[Vercel](https://vercel.com/)**
 3. Deploy automatically.
 
 **Link:**  
-[https://cartolinks.vercel.app](https://cartolinks.vercel.app)
+[https://cartolinks-website-tau.vercel.app/](https://cartolinks-website-tau.vercel.app/)
 
 ---
 
